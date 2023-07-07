@@ -30,7 +30,7 @@ const mascotaSchema = new mongoose.Schema({
 		required: true,
 	},
 	extraviada:{
-		type: Boolean,
+		type: String,
 		required: true,
 	}
 });
