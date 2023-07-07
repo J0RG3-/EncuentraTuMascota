@@ -24,11 +24,9 @@ export async function login(req, res) {
 	try {
 		const { password, email } = req.body;
 		const usuario = await Usuario.findOne({ email });
-
 		if (!usuario) {
 			return res.status(404).json({ error: "El usuario no existe" });
 		}
-
 		if (await comparePassword(password, usuario.password)) {
 			const accesToken = generarAccesToken(usuario);
 			return res.status(200).json({ accesToken });

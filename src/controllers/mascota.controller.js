@@ -1,6 +1,8 @@
 import Mascota from "../models/mascota.model.js";
 import Usuario from "../models/usuario.model.js";
 import { ObjectId } from "mongodb";
+import { SECRET } from "../configs/environment.js";
+import jwt from "jsonwebtoken"
 
 async function getListadoMascotas(req, res) {
   const mascotas = await Mascota.find();
@@ -25,10 +27,11 @@ async function getMascotaPorId(req, res) {
 }
 
 async function nuevaMascota(req, res) {
-  const { idUsuario,nombre, descripcion, edad, especie, sexo, nroChip, fotos,extraviada } = req.body;
+  const { token,nombre, descripcion, edad, especie, sexo, nroChip, fotos,extraviada } = req.body;
   try {
+    const decoded = jwt.verify(token, SECRET);
     await Mascota.create({
-      idUsuario: idUsuario,
+      idUsuario: decoded.id,
       nombre: nombre,
       descripcion: descripcion,
       edad: edad,
@@ -41,6 +44,7 @@ async function nuevaMascota(req, res) {
 
     return res.status(201).json({ success: true });
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({
